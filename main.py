@@ -106,7 +106,7 @@ async def request_password_reset(request: Request, email: str = Body(..., embed=
         raise HTTPException(status_code=404, detail="User not found")
     
     reset_token = create_reset_token(email)
-    reset_link = f"http://127.0.0.1:3000/reset-password?token={reset_token}"
+    reset_link = f"https://neurorun.net/reset-password?token={reset_token}"
     
     message = MessageSchema(
         subject="Reset your password",
@@ -166,7 +166,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["https://neurorun.net"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -335,7 +335,7 @@ async def register_user(request: Request, user: User):
     message = MessageSchema(
         subject="Confirm your email",
         recipients=[user.email],
-        body=f"Click this link to confirm your email: http://127.0.0.1:8000/users/confirm?token={confirmation_token}",
+        body=f"Click this link to confirm your email: https://neurorun.net/api/users/confirm?token={confirmation_token}",
         subtype="html"
     )
 
@@ -381,7 +381,7 @@ async def send_confirmation_email(email: str):
     message = MessageSchema(
         subject="Confirm your email",
         recipients=[email],
-        body=f"Click this link to confirm your email: http://127.0.0.1:8000/users/confirm?token={confirmation_token}",
+        body=f"Click this link to confirm your email: https://neurorun.net/api/users/confirm?token={confirmation_token}",
         subtype="html"
     )
 
@@ -556,4 +556,5 @@ async def get_race_bets(race_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+

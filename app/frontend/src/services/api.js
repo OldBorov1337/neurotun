@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: process.env.REACT_APP_API_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -60,11 +60,13 @@ export const fetchUserData = async () => {
         const response = await api.get("/users/me");
 
         if (response.data.avatar_url) {
-            const avatarPath = `http://127.0.0.1:8000${response.data.avatar_url}?t=${Date.now()}`;
-            localStorage.setItem("avatar_url", avatarPath);
+            const backendBaseURL = process.env.REACT_APP_API_URL || "https://neurorun.net";
+const avatarPath = `${backendBaseURL}${response.data.avatar_url}?t=${Date.now()}`;
+ localStorage.setItem("avatar_url", avatarPath);
             response.data.avatar_url = avatarPath;
         } else {
-            response.data.avatar_url = "http://127.0.0.1:8000/static/default-avatar.png";
+            response.data.avatar_url = `${backendBaseURL}/static/default-avatar.png`;
+
         }
 
         // ✅ Если ник пустой, берем его из localStorage
